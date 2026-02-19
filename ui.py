@@ -51,23 +51,24 @@ class MetronomeUI:
 
         # Configure root window
         self.root.title("Metronome")
-        self.root.geometry("800x600")
-        
+        self.root.geometry("800x700")
+        self.root.minsize(600, 500)
+
         # Create main container
         self.main_container = ttk.Frame(self.root, padding=WINDOW_PADDING)
         self.main_container.pack(fill=tk.BOTH, expand=True)
-        
-        # Create notebook for tabs
+
+        # Playback controls pack first so they're always visible at the bottom
+        self._create_playback_controls()
+
+        # Notebook fills remaining space
         self.notebook = ttk.Notebook(self.main_container)
         self.notebook.pack(fill=tk.BOTH, expand=True)
-        
+
         # Create tabs
         self._create_basic_tab()
         self._create_song_flow_tab()
         self._create_settings_tab()
-        
-        # Create playback controls
-        self._create_playback_controls()
 
         # Wire beat indicator callback
         self.metronome.on_beat = self._on_beat
