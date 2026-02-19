@@ -1,0 +1,29 @@
+{
+  "name": "Untitled",
+  "sections": [
+    {
+      "name": "Intro",
+      "bars": 4,
+      "bpm": 110,
+      "beats_per_bar": 4,
+      "subdivisions": 1,
+      "swing_enabled": false
+    },
+    {
+      "name": "Verse",
+      "bars": 8,
+      "bpm": 110,
+      "beats_per_bar": 4,
+      "subdivisions": 1,
+      "swing_enabled": false
+    },
+    {
+      "name": "Chorus",
+      "bars": 16,
+      "bpm": 122,
+      "beats_per_bar": 4,
+      "subdivisions": 1,
+      "swing_enabled": false
+    }
+  ]
+}

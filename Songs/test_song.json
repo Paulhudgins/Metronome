@@ -1,0 +1,13 @@
+{
+  "name": "Test Song",
+  "sections": [
+    {
+      "name": "Verse",
+      "bars": 8,
+      "bpm": 120,
+      "beats_per_bar": 4,
+      "subdivisions": 2,
+      "swing_enabled": false
+    }
+  ]
+} 
