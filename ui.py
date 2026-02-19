@@ -51,7 +51,6 @@ class MetronomeUI:
 
         # Configure root window
         self.root.title("Metronome")
-        self.root.geometry("800x700")
         self.root.minsize(600, 500)
 
         # Create main container
@@ -75,6 +74,16 @@ class MetronomeUI:
 
         # Keyboard shortcuts
         self.root.bind('<space>', self._toggle_start_stop)
+
+        # Resize window to fit all content, capped at screen dimensions
+        self.root.update_idletasks()
+        req_w = max(self.root.winfo_reqwidth(), 600)
+        req_h = max(self.root.winfo_reqheight(), 500)
+        screen_w = self.root.winfo_screenwidth()
+        screen_h = self.root.winfo_screenheight()
+        w = min(req_w, screen_w - 50)
+        h = min(req_h, screen_h - 100)
+        self.root.geometry(f"{w}x{h}")
 
     def _create_basic_tab(self):
         """Create the basic metronome tab."""
