@@ -55,8 +55,9 @@ class Metronome:
         self.start_time = 0.0
 
         # Playback feel
-        self.humanize = 0.0    # max jitter in milliseconds
-        self.fade_in_bars = 0  # 0 = disabled
+        self.humanize = 0.0             # max jitter in milliseconds
+        self.humanize_direction = 'push'  # 'push' = late, 'pull' = early
+        self.fade_in_bars = 0           # 0 = disabled
 
         # Pause state
         self._paused = False
@@ -308,6 +309,8 @@ class Metronome:
         else:
             base = 60 / (self.bpm.get() * self.subdivisions)
         if self.humanize > 0:
-            jitter = random.uniform(-self.humanize, self.humanize) / 1000
+            jitter = random.uniform(0, self.humanize) / 1000
+            if self.humanize_direction == 'pull':
+                jitter = -jitter
             return max(0.001, base + jitter)
         return base

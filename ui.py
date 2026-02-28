@@ -940,6 +940,22 @@ class MetronomeUI:
             command=self._on_humanize_change
         ).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=PADDING)
 
+        # Humanize direction
+        direction_row = ttk.Frame(feel_frame)
+        direction_row.pack(fill=tk.X, pady=(0, PADDING))
+        ttk.Label(direction_row, text="Direction:").pack(side=tk.LEFT)
+        self.humanize_direction_var = tk.StringVar(value='push')
+        ttk.Radiobutton(
+            direction_row, text="Push (play late)",
+            variable=self.humanize_direction_var, value='push',
+            command=self._on_humanize_change
+        ).pack(side=tk.LEFT, padx=PADDING)
+        ttk.Radiobutton(
+            direction_row, text="Pull (play early)",
+            variable=self.humanize_direction_var, value='pull',
+            command=self._on_humanize_change
+        ).pack(side=tk.LEFT)
+
         # Fade-in spinbox
         fadein_row = ttk.Frame(feel_frame)
         fadein_row.pack(fill=tk.X, pady=PADDING)
@@ -1208,6 +1224,7 @@ class MetronomeUI:
         except ValueError:
             pass
         self.metronome.humanize = self.humanize_var.get()
+        self.metronome.humanize_direction = self.humanize_direction_var.get()
         try:
             self.metronome.fade_in_bars = int(self.fadein_var.get())
         except (ValueError, tk.TclError):
@@ -1482,9 +1499,10 @@ class MetronomeUI:
         self.count_in_bars_spin.config(state=state)
 
     def _on_humanize_change(self, value=None):
-        """Sync humanize slider to metronome and update label."""
+        """Sync humanize slider and direction to metronome and update label."""
         val = self.humanize_var.get()
         self.metronome.humanize = val
+        self.metronome.humanize_direction = self.humanize_direction_var.get()
         self.humanize_label.config(text=f"{int(val)} ms")
 
     def _on_swing_toggle(self):
@@ -1584,6 +1602,7 @@ class MetronomeUI:
                 'regular_volume': self.sound_manager.regular_volume.get(),
                 'countin_volume': self.sound_manager.countin_volume.get(),
                 'humanize': self.humanize_var.get(),
+                'humanize_direction': self.humanize_direction_var.get(),
                 'fade_in_bars': self.fadein_var.get(),
                 'recent_songs': self._recent_songs,
             }
@@ -1651,6 +1670,9 @@ class MetronomeUI:
                 self.humanize_var.set(float(s['humanize']))
                 self.metronome.humanize = float(s['humanize'])
                 self.humanize_label.config(text=f"{int(float(s['humanize']))} ms")
+            if 'humanize_direction' in s:
+                self.humanize_direction_var.set(s['humanize_direction'])
+                self.metronome.humanize_direction = s['humanize_direction']
             if 'fade_in_bars' in s:
                 self.fadein_var.set(int(s['fade_in_bars']))
                 self.metronome.fade_in_bars = int(s['fade_in_bars'])
@@ -1809,9 +1831,12 @@ Notes:
 
 PLAYBACK FEEL (Settings tab)
 ──────────────────────────────
-• Humanize — adds a small random timing variation (±ms) to each tick, giving the click
+• Humanize — adds a small random timing variation to each tick, giving the click
   a more natural, human feel.  Set to 0 for a perfectly rigid grid.
   Recommended range: 5–20 ms.  Values above 30 ms become noticeably sloppy.
+  Direction controls which way the variation goes:
+    Push (play late)  — each tick lands slightly after the grid
+    Pull (play early) — each tick lands slightly before the grid
 
 • Fade-in (bars) — ramps the click volume from silence up to full over the first N bars
   of playback.  Useful for easing in at the start of a song.  Set to 0 to disable.
