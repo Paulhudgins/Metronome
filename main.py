@@ -13,7 +13,13 @@ from ui import MetronomeUI
 def main():
     """Main entry point."""
     root = tk.Tk()
-    
+
+    try:
+        import sv_ttk
+        sv_ttk.set_theme("dark")
+    except ImportError:
+        pass
+
     # Initialize managers
     songs_dir = os.path.join(os.path.dirname(__file__), "Songs")
     setlists_dir = os.path.join(os.path.dirname(__file__), "Setlists")

@@ -16,9 +16,9 @@ MIN_BPM = 20
 MAX_BPM = 250
 
 # Default sample assignments
-DEFAULT_COUNTIN_SAMPLE = "hihat-808.wav"
-DEFAULT_ACCENTED_SAMPLE = "kick-808.wav"
-DEFAULT_REGULAR_SAMPLE = "hihat-808.wav"
+DEFAULT_ACCENTED_SAMPLE = "click-high.wav"   # beat 1 — high-pitched click
+DEFAULT_REGULAR_SAMPLE  = "click-low.wav"    # other beats — lower-pitched click
+DEFAULT_COUNTIN_SAMPLE  = "click-mid.wav"    # count-in — mid-pitched click
 
 # Volume defaults
 DEFAULT_ACCENTED_VOLUME = 1.0
@@ -31,5 +31,5 @@ BUTTON_PADDING = 5
 FRAME_PADDING = 10
 WINDOW_PADDING = 20
 
-# Samples folder path
-SAMPLES_FOLDER = os.path.join(os.path.dirname(__file__), "Samples") 
+# Samples folder path — use abspath so it works regardless of launch directory
+SAMPLES_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Samples")
