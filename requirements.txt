@@ -1,1 +1,2 @@
 pygame>=2.0.0
+sv-ttk>=2.0.0  # optional — dark theme; app runs without it
