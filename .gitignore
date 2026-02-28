@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+Songs/
+Setlists/
+settings.json
