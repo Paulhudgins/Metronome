@@ -2,61 +2,91 @@
 
 A Python metronome application with song section management, setlist support, and sample-based audio playback.
 
-## Requirements
+## Setup
 
-- Python 3.8+
-- pygame
+1. Clone the repo
+2. Add WAV files to a `Samples/` folder in the project directory
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Run:
+   ```bash
+   python main.py
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+**Dependencies**
+- `pygame` — audio engine (required)
+- `sv-ttk` — dark theme (optional; app runs without it)
 
-## Running
+> `Samples/`, `Songs/`, `Setlists/`, and `settings.json` are local to your machine and not tracked by git.
 
-```bash
-python main.py
-```
+---
 
 ## Features
 
-### Basic Tab
+### Basic Metronome
 
-- **BPM slider** — set tempo from 20–250 BPM
-- **Beat indicator** — flashes red on accented beats, green on regular beats
-- **Tap Tempo** — click the button in rhythm to set BPM automatically; resets if you pause more than 2 seconds
-- **Space bar** — toggles start/stop (does not fire when typing in a field)
-- **Beats per Bar** — set the time signature numerator (e.g. 4 for 4/4)
-- **Subdivisions per Beat** — play subdivided beats (e.g. 2 for eighth notes)
-- **Swing** — applies a 2:1 long/short swing ratio; automatically sets subdivisions to 2
-- **Count-in Bars** — number of count-in bars before playback starts (default: 2)
-- **Timer** — stop automatically after a set number of seconds (0 = run indefinitely)
-- **Tempo Change Mode** — gradually speed up or slow down by a configurable step every N bars
+- **BPM** — slider and editable entry, 20–250 BPM; keyboard shortcuts `+`/`↑` and `-`/`↓` nudge by 1
+- **Tap Tempo** — click the button or press `T` to set BPM by feel; indicator flashes cyan on each tap
+- **Beat indicator** — flashes red on beat 1, green on other beats
+- **Time signature** — presets from 2/4 to 12/8, or enter a custom beats-per-bar value
+- **Accent pattern** — click each beat button to cycle Strong (`●`) / Medium (`◐`) / Weak (`○`)
+- **Subdivisions** — quarter notes through 32nd notes
+- **Swing** — 2:1 long/short ratio on eighth-note subdivisions
+- **Count-in** — enable/disable with a checkbox; set 1–8 bars
+- **Timer** — auto-stop after N seconds (0 = run indefinitely)
+- **Tempo Change Mode** — Speed Up or Slow Down by a configurable BPM step every N bars
+- **Space bar** — Start / Pause / Resume (ignored when a text field has focus)
 
-### Song Flow Tab
+### Playback Feel (Settings tab)
 
-Songs are made up of named **sections**, each with its own BPM, time signature, subdivision, and bar count. Sections play back in order, with settings changing automatically at each section boundary.
+- **Humanize** — adds random ±ms timing jitter per tick for a natural feel (0–50 ms)
+- **Fade-in** — ramps volume from silence to full over the first N bars (0 = off)
 
-**Song management:**
-- Create, save, and load songs (stored as JSON in the `Songs/` folder)
-- Add, edit, remove, and reorder sections
+### Song Flow
 
-**Setlist management:**
-- Group songs into a setlist with configurable delays between songs
-- Save and load setlists (stored as JSON in the `Setlists/` folder)
-- Play through the entire setlist automatically — each song completes before the next begins
+Songs are sequences of named **sections**, each with its own BPM, time signature, subdivisions, swing, bar count, and repeat count. Settings change automatically at each section boundary.
 
-### Settings Tab
+**Sections**
+- Add, edit, duplicate, reorder, and remove sections
+- **Count-in before section** — optional 1-bar count-in cue on each transition into a section (shown as `↵` in the list)
+- **Repeat** — play a section N times before moving on
 
-- Select samples for accented beats, regular beats, and the count-in independently
-- Upload custom `.wav` samples (copied into the `Samples/` folder automatically)
-- Adjust volume independently for each beat type
+**Playback**
+- **Play Song** — plays all sections in order, showing the Now Playing panel
+- **Practice Mode** — select a section and click Practice to loop it indefinitely with a count-in each repeat; Restart re-loops the same section
+- **Recent songs** — last 5 loaded/saved songs in a quick-load combobox
+
+**Now Playing panel**
+- Shows current section, BPM, bar counter, and upcoming section
+- **Restart** — restart the current song or practice section from bar 1
+- **Skip** — jump to the next song in the setlist
+- **Shuffle** — randomise the remaining setlist order
+- **Loop In / Loop Out** — mark a range of sections to repeat indefinitely; a count-in plays before each repeat
+
+### Setlists
+
+- Group songs into an ordered setlist with configurable silence between songs
+- Save and load setlists; missing songs on load show a warning and are skipped
+- **Export to Text** — save a formatted `.txt` summary of the setlist
+
+### Settings
+
+- Three independently configurable samples: accented beat, regular beat, count-in
+- Preview button for each sample
+- Volume sliders for each sample type
+- Upload custom `.wav` files (copied into `Samples/` automatically)
+- Scrollable settings tab
+
+---
 
 ## Project Structure
 
 ```
 Metronome/
 ├── main.py            # Entry point
-├── metronome.py       # Core playback engine (threading, timing, swing)
+├── metronome.py       # Core playback engine (threading, timing, swing, humanize)
 ├── ui.py              # Main window and all UI logic
 ├── dialogs.py         # Modal dialog windows
 ├── sound_manager.py   # Sample loading and playback (pygame)
@@ -65,11 +95,8 @@ Metronome/
 ├── setlist.py         # Setlist data model
 ├── setlist_manager.py # Setlist file I/O
 ├── config.py          # Default values and constants
-├── Samples/           # Built-in .wav sample files
-├── Songs/             # Saved song files (.json)
-└── Setlists/          # Saved setlist files (.json)
+├── requirements.txt   # Python dependencies
+├── Samples/           # WAV sample files (not tracked by git)
+├── Songs/             # Saved song files — JSON (not tracked by git)
+└── Setlists/          # Saved setlist files — JSON (not tracked by git)
 ```
-
-## Sample Files
-
-The `Samples/` folder includes a collection of 808 and acoustic drum samples across multiple categories: kicks, snares, hi-hats, open hats, crashes, rides, claps, toms, and percussion. Any `.wav` file placed in this folder will appear in the sample dropdowns.
